@@ -1,0 +1,8 @@
+{
+  "name": "diogenes",
+  "version": "1.0.0",
+  "description": "diogenes engine",
+  "main": "diogenes.js",
+  "author": "Jorge Garcia Hinestrosa",
+  "license": "MIT"
+}
