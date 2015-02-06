@@ -2,7 +2,7 @@
 
   var diogenes = {};
 
-  diogenes.Game = function(canvas, width, height, screen, items, characters, player) {
+  diogenes.Game = function(canvas, width, height, room, items, characters, player) {
 
     // Canvas context
     this.ctx = canvas.getContext('2d');
@@ -12,7 +12,7 @@
     this.height = height;
 
     // Objects
-    this.screen = screen;
+    this.room = room;
     this.items = items;
     this.characters = characters;
     this.player = player;
@@ -24,7 +24,7 @@
       };
 
       return function() {
-        drawElement(this.screen);
+        drawElement(this.room);
         this.items.forEach(drawElement);
       };
 
@@ -60,7 +60,7 @@
       return false;
   };
 
-  diogenes.Screen = function(id, x, y, width, height, asset) {
+  diogenes.Room = function(id, x, y, width, height, asset) {
     this.id = id;
     this.x = x;
     this.y = y;
@@ -69,7 +69,7 @@
     this.asset = asset;
   };
 
-  diogenes.Screen.prototype = Object.create(diogenes.DrawableEntity);
+  diogenes.Room.prototype = Object.create(diogenes.DrawableEntity);
 
 
   diogenes.Item = function(id, x, y, width, height, asset) {
