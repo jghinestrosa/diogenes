@@ -1,0 +1,1 @@
+diogenes.Character = function() {};
