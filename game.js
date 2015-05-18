@@ -1,3 +1,15 @@
+/**
+ * Creates a new Game
+ * @class
+ * @param {Canvas} canvas - The Canvas where the game will be rendered
+ * @param {number} width - The width of the canvas
+ * @param {number} height - The height of the canvas
+ * @param {Menu} menu - The Menu
+ * @param {Room} room - The Room
+ * @param {Character[]} characters - The characters to be rendered
+ * @param {Player} player - The player to be rendered
+ * @return {undefined}
+ */
 diogenes.Game = function(canvas, width, height, menu, room, characters, player) {
 
   // Canvas context
