@@ -3,15 +3,34 @@ diogenes.Menu = function(language) {
   language = language || diogenes.Menu.prototype.en;
   this.actions = this[language];
 
-  //var actionId = 1;
-  //actions.forEach(function(action) {
-    //var id = 'a' + actionId;
-    //this.actions[id] = action;
-    //actionId++;
-  //}.bind(this));
+  this.selectedAction = '';
 };
 
 diogenes.Menu.prototype = {};
+
+// Select an action from the menu
+diogenes.Menu.prototype.selectAction = function(action) {
+
+  // If the action exists, it is selected
+  if (this.actions[action]) {
+    this.selectedAction = action;
+  }
+};
+
+// Unselect an action from the menu
+diogenes.Menu.prototype.unselectAction = function() {
+  this.selectedAction = '';
+};
+
+// Check if an action from the menu is selected or not
+// TODO: Find a better name for this function
+diogenes.Menu.prototype.isSelected = function() {
+  if (this.selectedAction === '') {
+    return false;
+  }
+
+  return true;
+};
 
 // Spanish language
 diogenes.Menu.prototype.es = {

@@ -1,4 +1,4 @@
-diogenes.Game = function(canvas, width, height, room, characters, player) {
+diogenes.Game = function(canvas, width, height, menu, room, characters, player) {
 
   // Canvas context
   this.ctx = canvas.getContext('2d');
@@ -24,7 +24,24 @@ diogenes.Game = function(canvas, width, height, room, characters, player) {
   canvas.addEventListener('click', function(e) {
     console.log(e.pageX, e.pageY);
     room.items.forEach(function(item) {
-      item.isMouseOver(e.pageX, e.pageY, item.x, item.y, item.x+item.width, item.y+item.height);
+      
+      // Check if the mouse is over an item when the click is done
+      var isMouseOver = item.isMouseOver(e.pageX, e.pageY, item.x, item.y, item.x+item.width, item.y+item.height);
+      
+      if (isMouseOver) {
+
+        // If an action from the menu is selected
+        if (menu.isSelected()) {
+          
+          var selectedAction = menu.selectedAction;
+
+          // Try to use the action on the item
+          if (item[selectedAction]) {
+            item[selectedAction]();
+          }
+        }
+      }
+
     });
   });
 };

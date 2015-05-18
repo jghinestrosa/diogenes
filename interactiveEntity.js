@@ -7,3 +7,8 @@ diogenes.InteractiveEntity.isMouseOver = function(x, y) {
 
   return false;
 };
+
+// Listen to Menu events
+diogenes.InteractiveEntity.on = function(evt, callback) {
+  this[evt] = callback;
+};
