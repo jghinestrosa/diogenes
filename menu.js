@@ -13,13 +13,6 @@ diogenes.Menu = function(language) {
 };
 
 /**
- * Create the prototype object
- *
- * @return {undefined}
- */
-diogenes.Menu.prototype = {};
-
-/**
  * Select an action from the Menu
  *
  * @param {string} action - The key from the actions map

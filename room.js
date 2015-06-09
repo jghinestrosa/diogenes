@@ -21,13 +21,6 @@ diogenes.Room = function(id, x, y, width, height, asset, items) {
 };
 
 /**
- * Creates the prototype object
- *
- * @return {undefined}
- */
-diogenes.Room.prototype = {};
-
-/**
  * Draw the Room and all its Items
  *
  * @param {CanvasRenderingContext2D} ctx - Context for the drawing canvas
