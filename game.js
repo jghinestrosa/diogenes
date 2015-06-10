@@ -65,7 +65,9 @@ diogenes.Game.prototype.handleClicks = function(e) {
   var clickHandled = false;
 
   if (!this.handleIfClickIsOverItem(e)) {
-
+    if (!this.handleIfClickIsOverExit(e)) {
+    
+    }
   }
 
 };
@@ -77,7 +79,7 @@ diogenes.Game.prototype.handleIfClickIsOverItem = function(e) {
     if (item.isInteractive()) {
 
       // Check if the mouse is over an item when the click is done
-      var isMouseOver = item.isMouseOver(e.pageX, e.pageY, item.x, item.y, item.x, item.width, item.height);
+      var isMouseOver = item.isMouseOver(e.pageX, e.pageY, item.x, item.y, item.width, item.height);
 
       if (isMouseOver) {
 
@@ -98,5 +100,18 @@ diogenes.Game.prototype.handleIfClickIsOverItem = function(e) {
   }.bind(this));
 
   return false;
+};
+
+diogenes.Game.prototype.handleIfClickIsOverExit = function(e) {
+
+  this.activeRoom.adjacentRooms.forEach(function(room) {
+  
+    var isMouseOver = room.isMouseOver(e.pageX, e.pageY, room.x, room.y, room.width, room.height);
+    if (isMouseOver) {
+      this.loadRoom(room.id);
+    }
+  
+  }.bind(this));
+
 };
 

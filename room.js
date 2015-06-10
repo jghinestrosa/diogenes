@@ -20,7 +20,7 @@ diogenes.Room = function(id, x, y, width, height, asset, items, adjacentRooms) {
 
   this.items = items;
 
-  this.adjacentRooms = adjacentRooms;
+  this.adjacentRooms = adjacentRooms || [];
 
 };
 
