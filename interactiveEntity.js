@@ -1,24 +1,11 @@
 /**
- * InteractiveEntity object
+ * Object that contains the functions related to a InteractiveEntity
  *
  * @return {undefined}
  */
-diogenes.InteractiveEntity = Object.create(diogenes.DrawableEntity);
 
-/**
- * Check if the mouse is over the InteractiveEntity object
- *
- * @param {number} x - The x position to draw the InteractiveEntity 
- * @param {number} y - The y position to draw the InteractiveEntity
- * @return {boolean} true if the mouse is over the InteractiveEntity, false if the mouse is not over the InteractiveEntity
- */
-diogenes.InteractiveEntity.isMouseOver = function(x, y) {
-  if (x >= this.x && x <= this.x + this.width && y >= this.y && y <= this.y + this.height) {
-    return true;
-  }
-
-  return false;
-};
+diogenes.InteractiveEntity = {};
+diogenes.extend(diogenes.MouseFunctions, diogenes.InteractiveEntity);
 
 /**
  * Listen to a Menu event and handle it using a callback function

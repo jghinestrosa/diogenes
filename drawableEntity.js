@@ -1,10 +1,10 @@
 /**
- * DrawableEntity object
+ * Object that contains the functions related to a DrawableEntity
  * @namespace
  * 
  * @return {undefined}
  */
-diogenes.DrawableEntity = {
+diogenes.DrawableEntityFunctions = {
   
   /**
    * Draws a DrawableEntity
