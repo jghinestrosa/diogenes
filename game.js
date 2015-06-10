@@ -10,7 +10,7 @@
  * @param {Player} player - The player to be rendered
  * @return {undefined}
  */
-diogenes.Game = function(canvas, width, height, menu, room, characters, player) {
+diogenes.Game = function(canvas, width, height, menu, rooms, characters, player) {
 
   // Canvas context
   this.ctx = canvas.getContext('2d');
@@ -20,42 +20,83 @@ diogenes.Game = function(canvas, width, height, menu, room, characters, player) 
   this.height = height;
 
   // Objects
-  this.room = room;
+  this.rooms = {};
+
+  // The first room of the list is active by default
+  this.activeRoom = rooms[0];
+
+  rooms.forEach(this.addRoom.bind(this));
+
   this.characters = characters;
   this.player = player;
+  this.menu = menu;
 
-  this.draw = function(ctx) {
-    this.room.draw(ctx);
-  };
+};
 
-  this.run = function() {
-    this.draw(this.ctx);
-    window.requestAnimationFrame(this.run.bind(this));
-  };
+diogenes.Game.prototype.init = function(activeRoomId) {
 
-  canvas.addEventListener('click', function(e) {
-    console.log(e.pageX, e.pageY);
-    room.items.forEach(function(item) {
+  if (activeRoomId) {
+    this.loadRoom(activeRoomId);
+  }
 
-      if (item.isInteractive()) {
-        
-        // Check if the mouse is over an item when the click is done
-        var isMouseOver = item.isMouseOver(e.pageX, e.pageY, item.x, item.y, item.x + item.width, item.y + item.height);
+  canvas.addEventListener('click', this.handleClicks.bind(this));
+};
 
-        if (isMouseOver) {
+diogenes.Game.prototype.run = function() {
+  this.draw(this.ctx);
+  window.requestAnimationFrame(this.run.bind(this));
+};
 
-          // If an action from the menu is selected
-          if (menu.isSelected()) {
-            var selectedAction = menu.selectedAction;
+diogenes.Game.prototype.draw = function(ctx) {
+  this.activeRoom.draw(ctx);
+};
 
-            // Try to use the action on the item
-            if (item[selectedAction]) {
-              item[selectedAction]();
-            }
+diogenes.Game.prototype.addRoom = function(room) {
+  this.rooms[room.id] = room;
+};
+
+diogenes.Game.prototype.loadRoom = function(idRoom) {
+  this.activeRoom = this.rooms[idRoom];
+};
+
+diogenes.Game.prototype.handleClicks = function(e) {
+  console.log(e.pageX, e.pageY);
+
+  var clickHandled = false;
+
+  if (!this.handleIfClickIsOverItem(e)) {
+
+  }
+
+};
+
+// Check if the click has been done over an interactive it
+diogenes.Game.prototype.handleIfClickIsOverItem = function(e) {
+  this.activeRoom.items.forEach(function(item) {
+
+    if (item.isInteractive()) {
+
+      // Check if the mouse is over an item when the click is done
+      var isMouseOver = item.isMouseOver(e.pageX, e.pageY, item.x, item.y, item.x, item.width, item.height);
+
+      if (isMouseOver) {
+
+        // If an action from the menu is selected
+        if (this.menu.isSelected()) {
+          var selectedAction = this.menu.selectedAction;
+
+          // Try to use the action on the item
+          if (item[selectedAction]) {
+            item[selectedAction]();
           }
         }
-      }
 
-    });
-  });
+        return true;
+      }
+    }
+
+  }.bind(this));
+
+  return false;
 };
+

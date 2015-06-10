@@ -10,7 +10,7 @@
  * @param {Object[]} items - The items that are contained in the Room
  * @return {undefined}
  */
-diogenes.Room = function(id, x, y, width, height, asset, items) {
+diogenes.Room = function(id, x, y, width, height, asset, items, adjacentRooms) {
   this.id = id;
   this.x = x;
   this.y = y;
@@ -20,6 +20,16 @@ diogenes.Room = function(id, x, y, width, height, asset, items) {
 
   this.items = items;
 
+  this.adjacentRooms = adjacentRooms;
+
+};
+
+diogenes.Room.prototype.setAdjacentRooms = function(adjacentRooms) {
+  this.adjacentRooms = adjacentRooms;
+};
+
+diogenes.Room.prototype.addAdjacentRoom = function(adjacentRoom) {
+  this.adjacentRooms.push(adjacentRoom);
 };
 
 /**
