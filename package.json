@@ -1,8 +1,39 @@
 {
   "name": "diogenes",
-  "version": "1.0.0",
-  "description": "diogenes engine",
-  "main": "diogenes.js",
-  "author": "Jorge Garcia Hinestrosa",
-  "license": "MIT"
+  "version": "0.1.0",
+  "description": "An adventure game engine written in JavaScript",
+  "main": "build-node/diogenes.js",
+  "scripts": {
+    "babel": "babel --presets es2015 -d build-node src",
+    "browserify": "browserify --standalone diogenes build-node | derequire > build/diogenes.js",
+    "uglify": "uglifyjs -mc < build/diogenes.js > build/diogenes.min.js",
+    "clean": "rimraf build build-browser && mkdirp build build-browser",
+    "build": "npm run clean && npm run babel && npm run browserify && npm run uglify",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jghinestrosa/diogenes.git"
+  },
+  "keywords": [
+    "diogenes",
+    "adventure",
+    "game",
+    "engine"
+  ],
+  "author": "Jorge García Hinestrosa",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jghinestrosa/diogenes/issues"
+  },
+  "homepage": "https://github.com/jghinestrosa/diogenes#readme",
+  "devDependencies": {
+    "babel-cli": "^6.4.5",
+    "babel-preset-es2015": "^6.3.13",
+    "browserify": "^13.0.0",
+    "derequire": "^2.0.3",
+    "mkdirp": "^0.5.1",
+    "rimraf": "^2.5.1",
+    "tape": "^4.4.0"
+  }
 }
