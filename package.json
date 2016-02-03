@@ -11,7 +11,8 @@
     "build": "npm run clean && npm run babel && npm run browserify && npm run uglify",
     "build:debug": "npm run clean && npm run babel && npm run browserify",
     "jshint": "jshint src",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "watch": "watch 'npm run build:debug' src"
   },
   "repository": {
     "type": "git",
@@ -38,6 +39,8 @@
     "jshint": "^2.9.1",
     "mkdirp": "^0.5.1",
     "rimraf": "^2.5.1",
-    "tape": "^4.4.0"
+    "tape": "^4.4.0",
+    "uglify-js": "^2.6.1",
+    "watch": "^0.17.1"
   }
 }
