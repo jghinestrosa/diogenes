@@ -1,48 +1,65 @@
-/**
- * Creates a new Room 
- * @class
- * @param {number} id - The id of the Room
- * @param {number} x - The x position to draw the Room
- * @param {number} y - The y position to draw the Room
- * @param {number} width - The width of the Room
- * @param {number} height - The height of the Room
- * @param asset
- * @param {Object[]} items - The items that are contained in the Room
- * @return {undefined}
- */
-diogenes.Room = function(id, x, y, width, height, asset, items, adjacentRooms) {
-  this.id = id;
-  this.x = x;
-  this.y = y;
-  this.width = width;
-  this.height = height;
-  this.asset = asset;
+'use strict';
 
-  this.items = items;
+var Promise = require('bluebird');
 
-  this.adjacentRooms = adjacentRooms || [];
+function create(params) {
+  let {id, name, width, height, backgroundUrl, items} = params;
 
-};
+  let background = new Image();
 
-diogenes.Room.prototype.setAdjacentRooms = function(adjacentRooms) {
-  this.adjacentRooms = adjacentRooms;
-};
+  return {
+    getId() {
+      return id;
+    },
 
-diogenes.Room.prototype.addAdjacentRoom = function(adjacentRoom) {
-  this.adjacentRooms.push(adjacentRoom);
-};
+    getName() {
+      return name;
+    },
 
-/**
- * Draw the Room and all its drawable Items
- *
- * @param {CanvasRenderingContext2D} ctx - Context for the drawing canvas
- * @return {undefined}
- */
-diogenes.Room.prototype.draw = function(ctx) {
-  ctx.drawImage(this.asset, this.x, this.y, this.width, this.height);
-  this.items.forEach(function(item) {
-    if (item.isDrawable()) {
-      item.draw(ctx);
+    getWidth() {
+      return width;
+    },
+
+    getHeight() {
+      return height;
+    },
+
+    getBackgroundUrl() {
+      return backgroundUrl;
+    },
+
+    getItems() {
+      return items;
+    },
+
+    addItem(item, x, y) {
+      items.push({item, x, y});
+    },
+
+    setName(newName) {
+      name = newName;
+    },
+
+    setBackground(img) {
+      background = img;
+    },
+
+    paint(ctx, x = 0, y = 0) {
+      ctx.drawImage(background, x, y, width, height);
+    },
+
+    loadBackground() {
+      return new Promise((resolve, reject) => {
+        background.onload = function() {
+          resolve();
+        };
+
+        background.src = backgroundUrl;
+      });
     }
-  });
+  };
+}
+
+module.exports = {
+  create
 };

@@ -5,7 +5,7 @@ var item = require('./item.js');
 var game = require('./game.js');
 
 module.exports = {
-  room,
-  item,
-  game
+  room: room,
+  item: item,
+  game: game
 };

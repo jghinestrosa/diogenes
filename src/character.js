@@ -1,1 +1,1 @@
-diogenes.Character = function() {};
+'use strict';

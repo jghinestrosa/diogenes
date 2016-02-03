@@ -3,10 +3,11 @@
 var Promise = require('bluebird');
 
 function create(params) {
-  let {canvas, rooms} = params;
+  var canvas = params.canvas;
+  var rooms = params.rooms;
 
-  let ctx = canvas.getContext('2d');
-  let currentRoom;
+  var ctx = canvas.getContext('2d');
+  var currentRoom = undefined;
 
   function loop() {
     window.requestAnimationFrame(loop);
@@ -14,16 +15,14 @@ function create(params) {
     paint(ctx);
   }
 
-  function update() {
-  
-  }
+  function update() {}
 
   function paint(ctx) {
     currentRoom.paint(ctx);
   }
 
   function loadRoomsBackgrounds() {
-    return Promise.all(rooms.map(room => {
+    return Promise.all(rooms.map(function (room) {
       return room.loadBackground();
     }));
   }
@@ -33,29 +32,24 @@ function create(params) {
   }
 
   return {
-    getCanvas() {
+    getCanvas: function getCanvas() {
       return canvas;
     },
-
-    getRooms() {
+    getRooms: function getRooms() {
       return rooms;
     },
-
-    getCurrentRoom() {
+    getCurrentRoom: function getCurrentRoom() {
       return currentRoom;
     },
-
-    setCurrentRoom(room) {
+    setCurrentRoom: function setCurrentRoom(room) {
       currentRoom = room;
     },
-
-    run() {
-      loadRoomsBackgrounds()
-        .then(startLoop);
+    run: function run() {
+      loadRoomsBackgrounds().then(startLoop);
     }
   };
 }
 
 module.exports = {
-  create
+  create: create
 };
