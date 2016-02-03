@@ -28,6 +28,19 @@ function create(params) {
     }));
   }
 
+  function loadItemsAssets() {
+
+    // Get all the items from all the rooms
+    let items = rooms.reduce((previous, current) => {
+      return previous.concat(current.getItems());
+    }, []);
+
+    // TODO: Try to find something better than 'itemWrapper'
+    return Promise.all(items.map(itemWrapper => {
+      return itemWrapper.item.loadAssets();
+    }));
+  }
+
   function startLoop() {
     window.requestAnimationFrame(loop);
   }
@@ -51,6 +64,7 @@ function create(params) {
 
     run() {
       loadRoomsBackgrounds()
+        .then(loadItemsAssets)
         .then(startLoop);
     }
   };

@@ -40,6 +40,19 @@ function create(params) {
     }));
   }
 
+  function loadItemsAssets() {
+
+    // Get all the items from all the rooms
+    var items = rooms.reduce(function (previous, current) {
+      return previous.concat(current.getItems());
+    }, []);
+
+    // TODO: Try to find something better than 'itemWrapper'
+    return Promise.all(items.map(function (itemWrapper) {
+      return itemWrapper.item.loadAssets();
+    }));
+  }
+
   function startLoop() {
     window.requestAnimationFrame(loop);
   }
@@ -58,7 +71,7 @@ function create(params) {
       currentRoom = room;
     },
     run: function run() {
-      loadRoomsBackgrounds().then(startLoop);
+      loadRoomsBackgrounds().then(loadItemsAssets).then(startLoop);
     }
   };
 }
@@ -69,13 +82,39 @@ module.exports = {
 },{"bluebird":5}],3:[function(_dereq_,module,exports){
 'use strict';
 
+var Promise = _dereq_('bluebird');
+
 function create(params) {
+
+  // TODO: Try to improve the sizes variables names
   var id = params.id;
   var name = params.name;
-  var width = params.width;
-  var height = params.height;
-  var background = params.background;
-  var icon = params.icon;
+  var backgroundWidth = params.backgroundWidth;
+  var backgroundHeight = params.backgroundHeight;
+  var backgroundUrl = params.backgroundUrl;
+  var iconWidth = params.iconWidth;
+  var iconHeight = params.iconHeight;
+  var iconUrl = params.iconUrl;
+
+  // Images for painting in a room and in the inventory
+
+  var background = new Image();
+  var icon = new Image();
+
+  // TODO: Make this function accesible for any module
+  function loadImage(image, url) {
+    return new Promise(function (resolve, reject) {
+      image.onload = function () {
+        resolve();
+      };
+
+      image.src = url;
+    });
+  }
+
+  function paint(ctx, img, x, y, width, height) {
+    ctx.drawImage(img, x, y, width, height);
+  }
 
   return {
     getId: function getId() {
@@ -84,26 +123,35 @@ function create(params) {
     getName: function getName() {
       return name;
     },
-    getWidth: function getWidth() {
-      return width;
+    getBackgroundWidth: function getBackgroundWidth() {
+      return backgroundWidth;
     },
-    getHeight: function getHeight() {
-      return height;
+    getBackgroundHeight: function getBackgroundHeight() {
+      return backgroundHeight;
     },
-    getBackground: function getBackground() {
-      return background;
+    getBackgroundUrl: function getBackgroundUrl() {
+      return backgroundUrl;
     },
-    getIcon: function getIcon() {
-      return icon;
+    getIconUrl: function getIconUrl() {
+      return iconUrl;
     },
     setName: function setName(newName) {
       name = newName;
     },
-    setBackground: function setBackground(bg) {
-      background = bg;
+    setBackground: function setBackground(img) {
+      background = img;
     },
-    setIcon: function setIcon(newIcon) {
-      icon = newIcon;
+    setIcon: function setIcon(img) {
+      icon = img;
+    },
+    paintBackground: function paintBackground(ctx, x, y) {
+      paint(ctx, background, x, y, backgroundWidth, backgroundHeight);
+    },
+    paintIcon: function paintIcon(ctx, x, y) {
+      paint(ctx, icon, x, y, iconWidth, iconHeight);
+    },
+    loadAssets: function loadAssets() {
+      return Promise.all([loadImage(background, backgroundUrl), loadImage(icon, iconUrl)]);
     }
   };
 }
@@ -111,7 +159,7 @@ function create(params) {
 module.exports = {
   create: create
 };
-},{}],4:[function(_dereq_,module,exports){
+},{"bluebird":5}],4:[function(_dereq_,module,exports){
 'use strict';
 
 var Promise = _dereq_('bluebird');
@@ -123,6 +171,9 @@ function create(params) {
   var height = params.height;
   var backgroundUrl = params.backgroundUrl;
   var items = params.items;
+  var zIndex = params.zIndex;
+
+  items = items || [];
 
   var background = new Image();
 
@@ -145,8 +196,14 @@ function create(params) {
     getItems: function getItems() {
       return items;
     },
+    getZIndex: function getZIndex() {
+      return zIndex;
+    },
     addItem: function addItem(item, x, y) {
       items.push({ item: item, x: x, y: y });
+    },
+    addItems: function addItems(newItems) {
+      items.concat(newItems);
     },
     setName: function setName(newName) {
       name = newName;
@@ -154,11 +211,18 @@ function create(params) {
     setBackground: function setBackground(img) {
       background = img;
     },
+    setZIndex: function setZIndex(newZIndex) {
+      zIndex = newZIndex;
+    },
     paint: function paint(ctx) {
       var x = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
       var y = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
 
       ctx.drawImage(background, x, y, width, height);
+
+      items.forEach(function (itemWrapper) {
+        itemWrapper.item.paintBackground(ctx, itemWrapper.x, itemWrapper.y);
+      });
     },
     loadBackground: function loadBackground() {
       return new Promise(function (resolve, reject) {

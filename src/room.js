@@ -3,7 +3,9 @@
 var Promise = require('bluebird');
 
 function create(params) {
-  let {id, name, width, height, backgroundUrl, items} = params;
+  let {id, name, width, height, backgroundUrl, items, zIndex} = params;
+
+  items = items || [];
 
   let background = new Image();
 
@@ -32,8 +34,16 @@ function create(params) {
       return items;
     },
 
+    getZIndex() {
+      return zIndex;
+    },
+
     addItem(item, x, y) {
       items.push({item, x, y});
+    },
+
+    addItems(newItems) {
+      items.concat(newItems);
     },
 
     setName(newName) {
@@ -44,8 +54,16 @@ function create(params) {
       background = img;
     },
 
+    setZIndex(newZIndex) {
+      zIndex = newZIndex;
+    },
+
     paint(ctx, x = 0, y = 0) {
       ctx.drawImage(background, x, y, width, height);
+
+      items.forEach(itemWrapper => {
+        itemWrapper.item.paintBackground(ctx, itemWrapper.x, itemWrapper.y);
+      });
     },
 
     loadBackground() {
