@@ -1,7 +1,3 @@
-'use strict';
-
-var Promise = require('bluebird');
-
 function create(params) {
   let {id, name, width, height, backgroundUrl, items, zIndex} = params;
 
@@ -78,6 +74,4 @@ function create(params) {
   };
 }
 
-module.exports = {
-  create
-};
+export default { create };

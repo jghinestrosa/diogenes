@@ -1,7 +1,3 @@
-'use strict';
-
-var Promise = require('bluebird');
-
 function create(params) {
 
   // TODO: Try to improve the sizes variables names
@@ -58,7 +54,7 @@ function create(params) {
     setBackground(img) {
       background = img;
     },
-    
+
     setIcon(img) {
       icon = img;
     },
@@ -77,6 +73,4 @@ function create(params) {
   };
 }
 
-module.exports = {
-  create
-};
+export default { create };

@@ -1,11 +1,5 @@
-'use strict';
+import room from './room';
+import item from './item';
+import game from './game';
 
-var room = require('./room.js');
-var item = require('./item.js');
-var game = require('./game.js');
-
-module.exports = {
-  room,
-  item,
-  game
-};
+export { room, item, game };
