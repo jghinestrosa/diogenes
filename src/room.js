@@ -1,5 +1,6 @@
 function create(params) {
-  let {id, name, width, height, backgroundUrl, items, zIndex} = params;
+  const {id, width, height, backgroundUrl} = params;
+  let {name, items, zIndex} = params;
 
   items = items || [];
 
@@ -56,22 +57,18 @@ function create(params) {
 
     paint(ctx, x = 0, y = 0) {
       ctx.drawImage(background, x, y, width, height);
-
-      items.forEach(itemWrapper => {
+      items.forEach((itemWrapper) => {
         itemWrapper.item.paintBackground(ctx, itemWrapper.x, itemWrapper.y);
       });
     },
 
     loadBackground() {
-      return new Promise((resolve, reject) => {
-        background.onload = function() {
-          resolve();
-        };
-
+      return new Promise((resolve) => {
+        background.onload = () => resolve();
         background.src = backgroundUrl;
       });
     }
   };
 }
 
-export default { create };
+export default {create};

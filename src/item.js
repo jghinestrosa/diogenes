@@ -1,7 +1,15 @@
 function create(params) {
-
   // TODO: Try to improve the sizes variables names
-  let {id, name, backgroundWidth, backgroundHeight, backgroundUrl, iconWidth, iconHeight, iconUrl} = params;
+  const {
+    id,
+    backgroundWidth,
+    backgroundHeight,
+    backgroundUrl,
+    iconWidth,
+    iconHeight,
+    iconUrl
+  } = params;
+  let {name} = params;
 
   // Images for painting in a room and in the inventory
   let background = new Image();
@@ -9,11 +17,8 @@ function create(params) {
 
   // TODO: Make this function accesible for any module
   function loadImage(image, url) {
-    return new Promise((resolve, reject) => {
-      image.onload = function() {
-        resolve();
-      };
-
+    return new Promise((resolve) => {
+      image.onload = () => resolve();
       image.src = url;
     });
   }
@@ -73,4 +78,4 @@ function create(params) {
   };
 }
 
-export default { create };
+export default {create};

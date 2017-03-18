@@ -1,8 +1,14 @@
 function create(params) {
-  let {canvas, rooms} = params;
+  const {canvas, rooms} = params;
 
-  let ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext('2d');
   let currentRoom;
+
+  function update() {}
+
+  function paint() {
+    currentRoom.paint(ctx);
+  }
 
   function loop() {
     window.requestAnimationFrame(loop);
@@ -10,31 +16,16 @@ function create(params) {
     paint(ctx);
   }
 
-  function update() {
-  
-  }
-
-  function paint(ctx) {
-    currentRoom.paint(ctx);
-  }
-
   function loadRoomsBackgrounds() {
-    return Promise.all(rooms.map(room => {
-      return room.loadBackground();
-    }));
+    return Promise.all(rooms.map(room => room.loadBackground()));
   }
 
   function loadItemsAssets() {
-
     // Get all the items from all the rooms
-    let items = rooms.reduce((previous, current) => {
-      return previous.concat(current.getItems());
-    }, []);
+    const items = rooms.reduce((previous, current) => previous.concat(current.getItems()), []);
 
     // TODO: Try to find something better than 'itemWrapper'
-    return Promise.all(items.map(itemWrapper => {
-      return itemWrapper.item.loadAssets();
-    }));
+    return Promise.all(items.map(itemWrapper => itemWrapper.item.loadAssets()));
   }
 
   function startLoop() {
@@ -66,4 +57,4 @@ function create(params) {
   };
 }
 
-export default { create };
+export default {create};
