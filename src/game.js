@@ -22,6 +22,21 @@ function create(params) {
     );
   }
 
+  function loadCharactersAssets() {
+    // Get all the items from all the rooms
+    const characters = rooms.reduce(
+      (previous, current) => previous.concat(current.getCharacters()),
+      []
+    );
+
+    // TODO: Try to find something better than 'characterWrapper'
+    return Promise.all(
+      characters.map((characterWrapper) =>
+        characterWrapper.character.loadAssets()
+      )
+    );
+  }
+
   /* Loop related functions */
   function update() {}
 
@@ -30,7 +45,7 @@ function create(params) {
   }
 
   function loop() {
-    window.requestAnimationFrame(loop);
+    //window.requestAnimationFrame(loop);
     update();
     paint(ctx);
   }
@@ -59,6 +74,7 @@ function create(params) {
     run() {
       return loadRoomsBackgrounds()
         .then(loadItemsAssets)
+        .then(loadCharactersAssets)
         .then(startLoop)
         .catch((error) => {
           console.log('> Error when running the game', error);

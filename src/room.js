@@ -2,9 +2,10 @@ import { loadImage } from './utils/images/load';
 
 function create(params) {
   const { id, width, height, backgroundUrl } = params;
-  let { name, items, zIndex } = params;
+  let { name, items, characters, zIndex } = params;
 
   items = items || [];
+  characters = characters || [];
 
   const images = {
     background: null
@@ -35,6 +36,10 @@ function create(params) {
       return items;
     },
 
+    getCharacters() {
+      return characters;
+    },
+
     getZIndex() {
       return zIndex;
     },
@@ -45,6 +50,14 @@ function create(params) {
 
     addItems(newItems) {
       items.concat(newItems);
+    },
+
+    addCharacter(character, x, y) {
+      character.push({ character, x, y });
+    },
+
+    addCharacters(newCharacters) {
+      characters.concat(newCharacters);
     },
 
     setName(newName) {
@@ -63,6 +76,13 @@ function create(params) {
       ctx.drawImage(images.background, x, y, width, height);
       items.forEach((itemWrapper) => {
         itemWrapper.item.paintBackground(ctx, itemWrapper.x, itemWrapper.y);
+      });
+      characters.forEach((characterWrapper) => {
+        characterWrapper.character.paint(
+          ctx,
+          characterWrapper.x,
+          characterWrapper.y
+        );
       });
     },
 
