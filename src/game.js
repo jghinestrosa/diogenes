@@ -55,7 +55,13 @@ function create(params) {
     },
 
     run() {
-      loadRoomsBackgrounds().then(loadItemsAssets).then(startLoop);
+      return loadRoomsBackgrounds()
+        .then(loadItemsAssets)
+        .then(startLoop)
+        .catch((error) => {
+          console.log('> Error when running the game', error);
+          throw error;
+        });
     }
   };
 }

@@ -63,8 +63,9 @@ function create(params) {
     },
 
     loadBackground() {
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         background.onload = () => resolve();
+        background.onerror = (error) => reject(error);
         background.src = backgroundUrl;
       });
     }

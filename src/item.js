@@ -17,8 +17,9 @@ function create(params) {
 
   // TODO: Make this function accesible for any module
   function loadImage(image, url) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       image.onload = () => resolve();
+      image.onerror = (e) => reject(e);
       image.src = url;
     });
   }
