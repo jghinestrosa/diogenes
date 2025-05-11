@@ -4,18 +4,7 @@ function create(params) {
   const ctx = canvas.getContext('2d');
   let currentRoom;
 
-  function update() {}
-
-  function paint() {
-    currentRoom.paint(ctx);
-  }
-
-  function loop() {
-    window.requestAnimationFrame(loop);
-    update();
-    paint(ctx);
-  }
-
+  /* Assets management functions */
   function loadRoomsBackgrounds() {
     return Promise.all(rooms.map((room) => room.loadBackground()));
   }
@@ -31,6 +20,19 @@ function create(params) {
     return Promise.all(
       items.map((itemWrapper) => itemWrapper.item.loadAssets())
     );
+  }
+
+  /* Loop related functions */
+  function update() {}
+
+  function paint() {
+    currentRoom.paint(ctx);
+  }
+
+  function loop() {
+    window.requestAnimationFrame(loop);
+    update();
+    paint(ctx);
   }
 
   function startLoop() {
