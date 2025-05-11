@@ -2,10 +2,10 @@
   "name": "diogenes",
   "version": "0.1.0",
   "description": "An adventure game engine written in JavaScript",
-  "main": "build/diogenes.js",
+  "main": "dist/diogenes.js",
   "scripts": {
-    "build": "esbuild src/index.js --bundle --minify --format=esm --outfile=build/diogenes.js",
-    "dev": "esbuild src/index.js --bundle --format=esm --watch --outfile=build/diogenes.js",
+    "build": "esbuild src/index.js --bundle --minify --format=esm --outfile=dist/diogenes.js",
+    "dev": "esbuild src/index.js --bundle --format=esm --watch --outfile=dist/diogenes.js",
     "eslint": "eslint src"
   },
   "repository": {
