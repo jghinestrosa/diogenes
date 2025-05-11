@@ -9,7 +9,7 @@ function create(params) {
     iconHeight,
     iconUrl
   } = params;
-  let {name} = params;
+  let { name } = params;
 
   // Images for painting in a room and in the inventory
   let background = new Image();
@@ -73,9 +73,12 @@ function create(params) {
     },
 
     loadAssets() {
-      return Promise.all([loadImage(background, backgroundUrl), loadImage(icon, iconUrl)]);
+      return Promise.all([
+        loadImage(background, backgroundUrl),
+        loadImage(icon, iconUrl)
+      ]);
     }
   };
 }
 
-export default {create};
+export default { create };

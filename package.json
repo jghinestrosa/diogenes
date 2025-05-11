@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/jghinestrosa/diogenes#readme",
   "devDependencies": {
-    "esbuild": "0.25.4"
+    "esbuild": "0.25.4",
+    "prettier": "3.5.3"
   }
 }

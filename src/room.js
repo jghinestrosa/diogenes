@@ -1,6 +1,6 @@
 function create(params) {
-  const {id, width, height, backgroundUrl} = params;
-  let {name, items, zIndex} = params;
+  const { id, width, height, backgroundUrl } = params;
+  let { name, items, zIndex } = params;
 
   items = items || [];
 
@@ -36,7 +36,7 @@ function create(params) {
     },
 
     addItem(item, x, y) {
-      items.push({item, x, y});
+      items.push({ item, x, y });
     },
 
     addItems(newItems) {
@@ -71,4 +71,4 @@ function create(params) {
   };
 }
 
-export default {create};
+export default { create };
