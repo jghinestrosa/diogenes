@@ -1,3 +1,5 @@
+import { loadImage } from './utils/images/load';
+
 function create(params) {
   // TODO: Try to improve the sizes variables names
   const {
@@ -12,17 +14,10 @@ function create(params) {
   let { name } = params;
 
   // Images for painting in a room and in the inventory
-  let background = new Image();
-  let icon = new Image();
-
-  // TODO: Make this function accesible for any module
-  function loadImage(image, url) {
-    return new Promise((resolve, reject) => {
-      image.onload = () => resolve();
-      image.onerror = (e) => reject(e);
-      image.src = url;
-    });
-  }
+  const images = {
+    background: null,
+    icon: null
+  };
 
   function paint(ctx, img, x, y, width, height) {
     ctx.drawImage(img, x, y, width, height);
@@ -58,7 +53,7 @@ function create(params) {
     },
 
     setBackground(img) {
-      background = img;
+      images.background = img;
     },
 
     setIcon(img) {
@@ -66,7 +61,7 @@ function create(params) {
     },
 
     paintBackground(ctx, x, y) {
-      paint(ctx, background, x, y, backgroundWidth, backgroundHeight);
+      paint(ctx, images.background, x, y, backgroundWidth, backgroundHeight);
     },
 
     paintIcon(ctx, x, y) {
@@ -74,10 +69,12 @@ function create(params) {
     },
 
     loadAssets() {
-      return Promise.all([
-        loadImage(background, backgroundUrl),
-        loadImage(icon, iconUrl)
-      ]);
+      return Promise.all([loadImage(backgroundUrl), loadImage(iconUrl)]).then(
+        ([background, icon]) => {
+          images.background = background;
+          images.icon = icon;
+        }
+      );
     }
   };
 }

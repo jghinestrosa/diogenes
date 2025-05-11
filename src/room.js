@@ -1,10 +1,14 @@
+import { loadImage } from './utils/images/load';
+
 function create(params) {
   const { id, width, height, backgroundUrl } = params;
   let { name, items, zIndex } = params;
 
   items = items || [];
 
-  let background = new Image();
+  const images = {
+    background: null
+  };
 
   return {
     getId() {
@@ -48,7 +52,7 @@ function create(params) {
     },
 
     setBackground(img) {
-      background = img;
+      images.background = img;
     },
 
     setZIndex(newZIndex) {
@@ -56,17 +60,15 @@ function create(params) {
     },
 
     paint(ctx, x = 0, y = 0) {
-      ctx.drawImage(background, x, y, width, height);
+      ctx.drawImage(images.background, x, y, width, height);
       items.forEach((itemWrapper) => {
         itemWrapper.item.paintBackground(ctx, itemWrapper.x, itemWrapper.y);
       });
     },
 
     loadBackground() {
-      return new Promise((resolve, reject) => {
-        background.onload = () => resolve();
-        background.onerror = (error) => reject(error);
-        background.src = backgroundUrl;
+      return loadImage(backgroundUrl).then((background) => {
+        images.background = background;
       });
     }
   };
