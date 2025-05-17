@@ -58,8 +58,8 @@ function create(params) {
     },
 
     walkTo({ x, y }) {
-      position.dx = x;
-      position.dy = y;
+      position.dx = x - width / 2;
+      position.dy = y - height / 2;
     },
 
     getPlayable() {
