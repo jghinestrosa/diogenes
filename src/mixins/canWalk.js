@@ -2,19 +2,20 @@ import { calcLinearMovement } from '../physics';
 import { calcDirectionVector, normalizeVector } from '../math';
 
 function Walkable() {
-  this.position = {
-    dx: 0,
-    dy: 0,
-    updateTimestamp: 0
+  this.destination = {
+    x: 0,
+    y: 0
   };
+
+  this.updateTimestamp = 0;
 }
 
 Walkable.prototype.walkTo = function (entity, { x, y }) {
   const width = entity.getWidth();
   const height = entity.getHeight();
 
-  this.position.dx = x - width / 2;
-  this.position.dy = y - height / 2;
+  this.destination.x = x - width / 2;
+  this.destination.y = y - height / 2;
 };
 
 Walkable.prototype.getValidCoordinate = function (
@@ -34,21 +35,19 @@ Walkable.prototype.getValidCoordinate = function (
 Walkable.prototype.update = function (entity, time) {
   const currentPosition = entity.getPosition();
   const { x: currentX, y: currentY } = currentPosition;
-  const { dx, dy } = this.position;
+  const { x: dx, y: dy } = this.destination;
 
   if (currentX !== dx || currentY !== dy) {
-    if (!this.position.updateTimestamp) {
-      this.position.updateTimestamp = time;
+    if (!this.updateTimestamp) {
+      this.updateTimestamp = time;
     }
 
-    const deltaTime = time - this.position.updateTimestamp;
-    this.position.updateTimestamp = time;
-
-    const destinationPosition = { x: dx, y: dy };
+    const deltaTime = time - this.updateTimestamp;
+    this.updateTimestamp = time;
 
     const directionVector = calcDirectionVector(
       currentPosition,
-      destinationPosition
+      this.destination
     );
     const velocity = entity.getVelocity();
 
@@ -70,7 +69,7 @@ Walkable.prototype.update = function (entity, time) {
 
     entity.setPosition({ x: validX, y: validY });
   } else {
-    this.position.updateTimestamp = 0;
+    this.updateTimestamp = 0;
   }
 };
 
