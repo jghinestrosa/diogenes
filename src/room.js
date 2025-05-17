@@ -72,17 +72,25 @@ function create(params) {
       zIndex = newZIndex;
     },
 
+    //updateCharacterPosition(character, newPosition) {
+    //character.x = newPosition.x;
+    //character.y = newPosition.y;
+    //},
+
+    update(timestamp) {
+      // TODO: Do the same with items
+      characters.forEach((character) => {
+        character.update(timestamp);
+      });
+    },
+
     paint(ctx, x = 0, y = 0) {
       ctx.drawImage(images.background, x, y, width, height);
       items.forEach((itemWrapper) => {
         itemWrapper.item.paintBackground(ctx, itemWrapper.x, itemWrapper.y);
       });
-      characters.forEach((characterWrapper) => {
-        characterWrapper.character.paint(
-          ctx,
-          characterWrapper.x,
-          characterWrapper.y
-        );
+      characters.forEach((character) => {
+        character.paint(ctx);
       });
     },
 

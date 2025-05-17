@@ -2,7 +2,13 @@ function create(params) {
   const { canvas, rooms } = params;
 
   const ctx = canvas.getContext('2d');
+
+  const fps = 24;
+  const foo = 1 / fps;
+
   let currentRoom;
+
+  let dt = 0;
 
   /* Assets management functions */
   function loadRoomsBackgrounds() {
@@ -30,24 +36,46 @@ function create(params) {
     );
 
     // TODO: Try to find something better than 'characterWrapper'
-    return Promise.all(
-      characters.map((characterWrapper) =>
-        characterWrapper.character.loadAssets()
-      )
-    );
+    return Promise.all(characters.map((character) => character.loadAssets()));
+  }
+
+  /* Event listeners */
+  function handleEvents() {
+    canvas.addEventListener('click', (e) => {
+      const currentlyPlayableCharacter = currentRoom
+        .getCharacters()
+        .find((character) => character.getPlayable());
+
+      if (currentlyPlayableCharacter) {
+        currentlyPlayableCharacter.walkTo({
+          x: e.offsetX,
+          y: e.offsetY
+        });
+      }
+    });
   }
 
   /* Loop related functions */
-  function update() {}
+  function update(timestamp) {
+    currentRoom.update(timestamp);
+  }
 
   function paint() {
     currentRoom.paint(ctx);
   }
 
-  function loop() {
-    //window.requestAnimationFrame(loop);
-    update();
-    paint(ctx);
+  function loop(timestamp) {
+    if (!dt) {
+      dt = timestamp;
+    }
+
+    if ((timestamp - dt) / 1000 >= foo) {
+      dt = timestamp;
+      update(timestamp);
+      paint(ctx);
+    }
+
+    window.requestAnimationFrame(loop);
   }
 
   function startLoop() {
@@ -75,6 +103,7 @@ function create(params) {
       return loadRoomsBackgrounds()
         .then(loadItemsAssets)
         .then(loadCharactersAssets)
+        .then(handleEvents)
         .then(startLoop)
         .catch((error) => {
           console.log('> Error when running the game', error);
