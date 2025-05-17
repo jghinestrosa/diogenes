@@ -1,6 +1,4 @@
 import { loadImage } from './utils/images/load';
-import { calcLinearMovement } from './physics';
-import { calcDirectionVector, normalizeVector } from './math';
 
 function create(params) {
   const {
@@ -18,10 +16,7 @@ function create(params) {
 
   const position = {
     x,
-    y,
-    dx: x,
-    dy: y,
-    updateTimestamp: 0
+    y
   };
 
   const images = {
@@ -49,17 +44,29 @@ function create(params) {
       return { ...position };
     },
 
+    getVelocity() {
+      return velocity;
+    },
+
     setVelocity(newVelocity) {
       velocity = newVelocity;
     },
 
-    setPlayable(isPlayableUpdated) {
-      isPlayable = isPlayableUpdated;
+    setX(x) {
+      position.x = x;
     },
 
-    walkTo({ x, y }) {
-      position.dx = x - width / 2;
-      position.dy = y - height / 2;
+    setY(y) {
+      position.y = y;
+    },
+
+    setPosition(updatedPosition) {
+      position.x = updatedPosition.x;
+      position.y = updatedPosition.y;
+    },
+
+    setPlayable(isPlayableUpdated) {
+      isPlayable = isPlayableUpdated;
     },
 
     getPlayable() {
@@ -67,50 +74,8 @@ function create(params) {
     },
 
     update(time) {
-      if (position.x !== position.dx || position.y !== position.dy) {
-        if (!position.updateTimestamp) {
-          position.updateTimestamp = time;
-        }
-
-        const deltaTime = time - position.updateTimestamp;
-        position.updateTimestamp = time;
-
-        const currentPosition = { x: position.x, y: position.y };
-        const destinationPosition = { x: position.dx, y: position.dy };
-
-        const directionVector = calcDirectionVector(
-          currentPosition,
-          destinationPosition
-        );
-        const normalizedVector = normalizeVector(directionVector);
-        const x = calcLinearMovement(
-          currentPosition.x,
-          normalizedVector.x * velocity,
-          deltaTime
-        );
-        const y = calcLinearMovement(
-          currentPosition.y,
-          normalizedVector.y * velocity,
-          deltaTime
-        );
-
-        if (position.dx - position.x < 0) {
-          position.x = Math.max(position.dx, x);
-        } else if (position.dx - position.x > 0) {
-          position.x = Math.min(position.dx, x);
-        } else {
-          position.x = x;
-        }
-
-        if (position.dy - position.y < 0) {
-          position.y = Math.max(position.dy, y);
-        } else if (position.dy - position.y > 0) {
-          position.y = Math.min(position.dy, y);
-        } else {
-          position.y = y;
-        }
-      } else {
-        position.updateTimestamp = 0;
+      if (this.walkable) {
+        this.walkable.update(this, time);
       }
     },
 

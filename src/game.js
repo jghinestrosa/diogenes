@@ -42,12 +42,12 @@ function create(params) {
   /* Event listeners */
   function handleEvents() {
     canvas.addEventListener('click', (e) => {
-      const currentlyPlayableCharacter = currentRoom
+      const currentPlayableCharacter = currentRoom
         .getCharacters()
         .find((character) => character.getPlayable());
 
-      if (currentlyPlayableCharacter) {
-        currentlyPlayableCharacter.walkTo({
+      if (currentPlayableCharacter.walkable) {
+        currentPlayableCharacter.walkable.walkTo(currentPlayableCharacter, {
           x: e.offsetX,
           y: e.offsetY
         });
