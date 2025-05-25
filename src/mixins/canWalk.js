@@ -3,8 +3,8 @@ import { calcDirectionVector, normalizeVector } from '../math';
 
 function Walkable() {
   this.destination = {
-    x: 0,
-    y: 0
+    x: null,
+    y: null
   };
 
   this.updateTimestamp = 0;
@@ -16,6 +16,7 @@ Walkable.prototype.walkTo = function (entity, { x, y }) {
 
   this.destination.x = x - width / 2;
   this.destination.y = y - height / 2;
+  console.log('>> WALKTO', this.destination.x, this.destination.y);
 };
 
 Walkable.prototype.getValidCoordinate = function (
@@ -36,6 +37,12 @@ Walkable.prototype.update = function (entity, time) {
   const currentPosition = entity.getPosition();
   const { x: currentX, y: currentY } = currentPosition;
   const { x: dx, y: dy } = this.destination;
+
+  if (dx === null || dy === null) {
+    return;
+  }
+
+  //console.log('>> update', currentX, currentY, dx, dy);
 
   if (currentX !== dx || currentY !== dy) {
     if (!this.updateTimestamp) {
@@ -69,8 +76,20 @@ Walkable.prototype.update = function (entity, time) {
 
     entity.setPosition({ x: validX, y: validY });
   } else {
+    this.destination.x = null;
+    this.destination.y = null;
     this.updateTimestamp = 0;
   }
+};
+
+Walkable.prototype.isWalking = function (entity) {
+  if (this.destination.x == null && this.destination.y == null) {
+    return false;
+  }
+
+  return (
+    entity.getX() !== this.destination.x || entity.getY() !== this.destination.y
+  );
 };
 
 export default function canWalk(entity) {

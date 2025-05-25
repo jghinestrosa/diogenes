@@ -52,6 +52,21 @@ function create(params) {
           y: e.offsetY
         });
       }
+
+      // TODO: If orientable?
+      console.log(
+        '>>> OFFSETX',
+        e.offsetX,
+        'X',
+        currentPlayableCharacter.getX()
+      );
+      if (e.offsetX > currentPlayableCharacter.getX()) {
+        currentPlayableCharacter.setOrientation('right');
+      }
+
+      if (e.offsetX < currentPlayableCharacter.getX()) {
+        currentPlayableCharacter.setOrientation('left');
+      }
     });
   }
 
